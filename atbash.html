@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Atbash Cipher</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f2f2f2; }
+        .container { width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; }
+        input, textarea, button { width: 100%; margin-top: 10px; padding: 8px; font-size: 14px; }
+        .hasil { margin-top: 15px; padding: 10px; border-top: 1px solid #ddd; font-weight: bold; word-wrap: break-word; }
+        .label-file { font-size: 12px; color: #666; margin-top: 15px; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>Atbash Cipher</h3>
+
+    <label class="label-file">Pilih file teks (.txt) untuk disandi:</label>
+    <input type="file" id="fileInput" accept=".txt" onchange="bacaFile(this)">
+
+    <textarea id="pesan" rows="4" placeholder="Pesan"></textarea>
+
+    <button onclick="proses()">Proses Sandi Atbash</button>
+
+    <div id="hasil" class="hasil"></div>
+
+    <button id="btnSimpan" style="background: #2196F3; color: white; display: none;" onclick="simpanFile()">💾 Simpan Hasil ke .txt</button>
+    <button onclick="kembali()">⬅ Kembali</button>
+</div>
+
+<script>
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    function atbash(message) {
+        const rev = "ZYXWVUTSRQPONMLKJIHGFEDCBA";
+        return message.toUpperCase().split('').map(char => {
+            let index = alphabet.indexOf(char);
+            return index === -1 ? char : rev[index];
+        }).join('');
+    }
+
+    function bacaFile(input) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("pesan").value = e.target.result;
+        };
+        reader.readAsText(file);
+    }
+
+    function simpanFile() {
+        const konten = document.getElementById("hasil").innerText;
+        const blob = new Blob([konten], { type: "text/plain" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "hasil_atbash.txt";
+        a.click();
+    }
+
+    function proses() {
+        const t = document.getElementById("pesan").value;
+        if (t === "") return alert("Pesan kosong");
+        
+        const finalResult = atbash(t);
+        document.getElementById("hasil").innerText = "Hasil: " + finalResult;
+        document.getElementById("btnSimpan").style.display = "block";
+    }
+
+    function kembali() { window.location.href = "awal.html"; }
+</script>
+</body>
+</html>
