@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Caesar Cipher</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
+
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .hasil {
+            margin-top: 15px;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            font-weight: bold;
+        }
+        .label-file {
+            font-size: 12px;
+            color: #666;
+            margin-top: 15px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>Caesar Cipher</h3>
+
+    <label class="label-file">Pilih file teks (.txt) untuk disandi:</label>
+    <input type="file" id="fileInput" accept=".txt" onchange="bacaFile(this)">
+
+    <input type="number" id="shift" placeholder="Shift">
+    <textarea id="pesan" rows="4" placeholder="Pesan"></textarea>
+
+    <button id="btnEnkripsi">Enkripsi</button>
+    <button id="btnDekripsi">Dekripsi</button>
+
+    <div id="hasil" class="hasil"></div>
+
+    <button id="btnSimpan" style="background: #2196F3; color: white; display: none;" onclick="simpanFile()">💾 Simpan Hasil ke .txt</button>
+
+    <button onclick="kembali()">⬅ Kembali</button>
+</div>
+
+<script>
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let newalpha = "";
+
+    function shift(n) {
+        n = ((n % 26) + 26) % 26;
+        newalpha = "";
+        for (let i = 0; i < alphabet.length; i++) {
+            newalpha += alphabet[(i + n) % 26];
+        }
+    }
+
+    function encode(message) {
+        let result = "";
+        for (let char of message) {
+            let index = alphabet.indexOf(char);
+            result += index === -1 ? char : newalpha[index];
+        }
+        return result;
+    }
+
+    function proses(arah) {
+        const s = parseInt(document.getElementById("shift").value);
+        const t = document.getElementById("pesan").value.toUpperCase();
+
+        if (isNaN(s) || t === "") {
+            alert("Input tidak valid");
+            return;
+        }
+
+        shift(s * arah);
+        document.getElementById("hasil").innerText =
+            (arah === 1 ? "Hasil Enkripsi: " : "Hasil Dekripsi: ") + encode(t);
+        
+        document.getElementById("btnSimpan").style.display = "block";
+    }
+
+    document.getElementById("btnEnkripsi").addEventListener("click", function() {
+        proses(1);
+    });
+
+    document.getElementById("btnDekripsi").addEventListener("click", function() {
+        proses(-1);
+    });
+
+    function kembali() {
+        window.location.href = "awal.html";
+    }
+
+    function bacaFile(input) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("pesan").value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    }
+
+    function simpanFile() {
+        const konten = document.getElementById("hasil").innerText;
+        if (!konten) return;
+
+        const blob = new Blob([konten], { type: "text/plain" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "hasil_caesar.txt";
+        a.click();
+    }
+</script>
+
+</body>
+</html>
