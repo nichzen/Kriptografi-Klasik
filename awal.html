@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Halaman Awal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 350px;
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h2 { color: #333; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; }
+
+        .pin-section {
+            margin-top: 25px;
+        }
+
+        /* Style Tambahan untuk Dropdown */
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="password"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Selamat Datang</h2>
+    <p>Aplikasi Enkripsi & Dekripsi Caesar Cipher</p>
+
+    <div class="pin-section">
+        <select id="metodeSandi">
+            <option value="caesar">Sandi Caesar</option>
+            <option value="atbash">Sandi Atbash</option>
+        </select>
+
+        <input type="password" id="pinInput" placeholder="Masukkan PIN" maxlength="4">
+        <button onclick="verifikasi()">Masuk ke Aplikasi</button>
+        <p id="error" class="error-msg">PIN salah, coba lagi!</p>
+    </div>
+</div>
+
+<script>
+function verifikasi() {
+    const pinBenar = "1234"; 
+    const input = document.getElementById("pinInput").value;
+    const metode = document.getElementById("metodeSandi").value;
+    const error = document.getElementById("error");
+
+    if (input === pinBenar) {
+        // Navigasi ke file yang sesuai dengan pilihan metode
+        if (metode === "caesar") {
+            window.location.href = "caesar.html"; 
+        } else {
+            window.location.href = "atbash.html";
+        }
+    } else {
+        error.style.display = "block";
+        document.getElementById("pinInput").value = "";
+        document.getElementById("pinInput").focus();
+    }
+}
+    document.getElementById("pinInput").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            verifikasi();
+        }
+    });
+</script>
+
+</body>
+</html>
